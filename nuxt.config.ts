@@ -30,5 +30,13 @@ export default defineNuxtConfig({
      * @default "./components/ui"
      */
     componentDir: './components/ui'
+  },
+  vite: {
+    resolve: {
+      alias: {
+        ".prisma/client/default": "./node_modules/.prisma/client/default.js",
+        ".prisma/client/index-browser": "./node_modules/.prisma/client/index-browser.js",
+      }
+    }
   }
 })
