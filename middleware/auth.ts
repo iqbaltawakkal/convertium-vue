@@ -1,5 +1,6 @@
 import prisma from '~/server/db';
 import { verifyToken } from '~/utils/auth';
+import { getCookie, deleteCookie } from 'h3'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
     // Only run on the server
