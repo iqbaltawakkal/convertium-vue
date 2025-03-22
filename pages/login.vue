@@ -16,7 +16,7 @@
             <Input
               id="email"
               v-model="email"
-              placeholder="name@example.com"
+              placeholder="Email"
               type="email"
               auto-capitalize="none"
               auto-complete="email"
@@ -29,7 +29,7 @@
             <Label class="sr-only" for="password"> Password </Label>
             <Input
               id="password"
-              placeholder="name@example.com"
+              placeholder="Password"
               type="password"
               auto-capitalize="none"
               auto-correct="off"
@@ -73,11 +73,11 @@ const login = async () => {
   try {
     // Call the login API
     isLoading.value = true;
-    const { message } = await useFetch("/api/login", {
+    const { statusCode, message } = await useFetch("/api/login", {
       method: "POST",
       body: { email: email.value, password: password.value },
     });
-
+    if (statusCode !== 200) throw Error(message);
     // Redirect to the dashboard after successful login
     navigateTo("/dashboard");
   } catch (error) {
