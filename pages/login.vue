@@ -63,7 +63,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { LoaderIcon } from "lucide-vue-next";
 const email = ref("");
 const password = ref("");
@@ -73,7 +73,7 @@ const login = async () => {
   try {
     // Call the login API
     isLoading.value = true;
-    const { statusCode, message } = await useFetch("/api/login", {
+    const { statusCode, message }: any = await useFetch("/api/login", {
       method: "POST",
       body: { email: email.value, password: password.value },
     });
@@ -81,7 +81,7 @@ const login = async () => {
     // Redirect to the dashboard after successful login
     navigateTo("/dashboard");
   } catch (error) {
-    alert(error.data.message || "Login failed");
+    alert((error as Error).message || "Login failed");
   } finally {
     isLoading.value = false;
   }

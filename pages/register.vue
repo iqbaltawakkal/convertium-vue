@@ -104,17 +104,19 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 const email = ref("");
 const password = ref("");
 const firstName = ref("");
 const lastName = ref("");
 const salutation = ref("");
 const salutations = ["Mr.", "Mrs."];
+const isLoading = ref(false);
 
 const register = async () => {
   try {
-    const { token } = await useFetch("/api/register", {
+    isLoading.value = true;
+    const { statusCode, message }: any = await useFetch("/api/register", {
       method: "POST",
       body: {
         email: email.value,
@@ -124,9 +126,10 @@ const register = async () => {
         salutation: salutation.value,
       },
     });
+    if (statusCode !== 200) throw Error(message);
     navigateTo("/dashboard");
   } catch (error) {
-    alert(error.data.message);
+    alert((error as Error).message);
   }
 };
 </script>
