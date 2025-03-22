@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Find user in the database
-  const user = await prisma.user.findUnique({
+  const user: any = await prisma.user.findUnique({
     where: { email },
   });
   if (!user) {
