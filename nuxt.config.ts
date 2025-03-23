@@ -1,6 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2024-05-07',
+  app: {
+    head: {
+      title: 'Convertium vue', // default fallback title
+      meta: [
+        { name: 'description', content: 'excercise using vue' }
+      ],
+      htmlAttrs: {
+        lang: 'en',
+      },
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      ]
+    }
+  },
   devtools: { enabled: true },
   modules: [
     '@nuxt/eslint',
