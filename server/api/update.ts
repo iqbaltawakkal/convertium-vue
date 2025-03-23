@@ -10,16 +10,9 @@ export default defineEventHandler(async (event) => {
   // Verify the token
   const payload = await verifyToken(token || '');
 
-  // Validate input
-  if (!email || !firstName || !lastName || !salutation) {
-    throw createError({ statusCode: 400, message: 'All fields are required' });
-  }
-
   const updateUser = await prisma.user.update({
     where: { id: payload.userId },
-    data: {
-      email, firstName, lastName, salutation
-    },
+    data: body,
   })
 
   if (!updateUser) {

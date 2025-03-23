@@ -38,7 +38,24 @@
               class="bg-white"
             />
           </div>
-          <Button type="submit" class="mt-4">
+          <div class="grid gap-1">
+            <Label class="sr-only" for="password"> Confirm password </Label>
+            <Input
+              id="confirmPassword"
+              type="password"
+              placeholder="Confirm password"
+              auto-capitalize="none"
+              auto-correct="off"
+              v-model="confirmPassword"
+              required
+              class="bg-white"
+            />
+          </div>
+          <Button
+            :disabled="!password || !email || !confirmPassword"
+            type="submit"
+            class="mt-4"
+          >
             <LoaderIcon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
             Register
           </Button>
@@ -69,12 +86,17 @@ import { toast } from "vue-sonner";
 
 const email = ref("");
 const password = ref("");
+const confirmPassword = ref("");
 const isLoading = ref(false);
 
 const register = async () => {
+  if (password.value !== confirmPassword.value) {
+    toast("Password and confirm password does not match");
+    return;
+  }
   try {
     isLoading.value = true;
-    const { error, status } = await useFetch("/api/register", {
+    const { error } = await useFetch("/api/register", {
       method: "POST",
       body: {
         email: email.value,
@@ -86,6 +108,8 @@ const register = async () => {
     toast("Register successful, you`re now logged in");
   } catch (error) {
     toast((error as Error).message || "register failed");
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
