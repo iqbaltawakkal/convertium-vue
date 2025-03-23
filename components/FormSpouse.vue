@@ -7,13 +7,13 @@
       </p>
     </div>
     <div>
-      <p class="text-sm font-medium leading-none">First name</p>
+      <p class="text-sm font-medium leading-none">Spouse first name</p>
       <p class="text-sm text-muted-foreground">
         {{ user?.spouseFirstName || "-" }}
       </p>
     </div>
     <div>
-      <p class="text-sm font-medium leading-none">Last name</p>
+      <p class="text-sm font-medium leading-none">Spouse last name</p>
       <p class="text-sm text-muted-foreground">
         {{ user?.spouseLastName || "-" }}
       </p>
@@ -39,7 +39,9 @@
         </Select>
       </div>
       <div>
-        <Label class="text-sm font-medium leading-none">First name</Label>
+        <Label class="text-sm font-medium leading-none"
+          >Spouse first name</Label
+        >
         <Input
           id="spouseFirstName"
           v-model="spouseFirstName"
@@ -53,7 +55,7 @@
         />
       </div>
       <div>
-        <Label class="text-sm font-medium leading-none">Last name</Label>
+        <Label class="text-sm font-medium leading-none">Spouse last name</Label>
         <Input
           id="spouseLastName"
           v-model="spouseLastName"
