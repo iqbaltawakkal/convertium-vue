@@ -38,7 +38,7 @@
               class="bg-white"
             />
           </div>
-          <Button type="submit">
+          <Button type="submit" class="mt-4">
             <LoaderIcon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
             Sign In
           </Button>
@@ -73,11 +73,11 @@ const login = async () => {
   try {
     // Call the login API
     isLoading.value = true;
-    const { statusCode, message }: any = await useFetch("/api/login", {
+    const { error, status } = await useFetch("/api/login", {
       method: "POST",
       body: { email: email.value, password: password.value },
     });
-    if (statusCode !== 200) throw Error(message);
+    if (error.value) throw Error(status.value);
     // Redirect to the dashboard after successful login
     navigateTo("/dashboard");
   } catch (error) {

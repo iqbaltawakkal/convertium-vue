@@ -116,7 +116,7 @@ const isLoading = ref(false);
 const register = async () => {
   try {
     isLoading.value = true;
-    const { statusCode, message }: any = await useFetch("/api/register", {
+    const { error, status } = await useFetch("/api/register", {
       method: "POST",
       body: {
         email: email.value,
@@ -126,7 +126,7 @@ const register = async () => {
         salutation: salutation.value,
       },
     });
-    if (statusCode !== 200) throw Error(message);
+    if (error.value) throw Error(status.value);
     navigateTo("/dashboard");
   } catch (error) {
     alert((error as Error).message);
