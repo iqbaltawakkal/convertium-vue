@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { email, password } = body;
+  const { email, password, keepMeLoggedIn } = body;
 
   // Validate input
   if (!email || !password) {
@@ -31,9 +31,9 @@ export default defineEventHandler(async (event) => {
   // Set HTTP-only cookie
   setCookie(event, 'auth_token', token, {
     httpOnly: true,
-    maxAge: 2 * 60 * 60, // 2 hours
+    maxAge: keepMeLoggedIn ? 60 * 60 * 24 * 400 : 2 * 60 * 60,
     sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production', // Enable in production
+    secure: !import.meta.dev, // Enable in production
   });
 
   return { message: 'Login successful' };

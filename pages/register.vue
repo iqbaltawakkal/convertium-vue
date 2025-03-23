@@ -38,47 +38,6 @@
               class="bg-white"
             />
           </div>
-          <div class="grid gap-1">
-            <Label class="sr-only" for="first-name"> First name </Label>
-            <Input
-              id="first-name"
-              type="text"
-              placeholder="First name"
-              auto-capitalize="none"
-              auto-correct="off"
-              v-model="firstName"
-              required
-              class="bg-white"
-            />
-          </div>
-          <div class="grid gap-1">
-            <Label class="sr-only" for="last-name"> Last name </Label>
-            <Input
-              id="last-name"
-              type="text"
-              placeholder="Last name"
-              auto-capitalize="none"
-              auto-correct="off"
-              v-model="lastName"
-              required
-              class="bg-white"
-            />
-          </div>
-          <div class="grid gap-1">
-            <Label class="sr-only" for="last-name"> Salutation </Label>
-            <Select v-model="salutation" required>
-              <SelectTrigger class="bg-white">
-                <SelectValue placeholder="Select salutation" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem v-for="item in salutations" :value="item">
-                    {{ item }}
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
           <Button type="submit" class="mt-4">
             <LoaderIcon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
             Register
@@ -105,12 +64,11 @@
 </template>
 
 <script setup lang="ts">
+import { LoaderIcon } from "lucide-vue-next";
+import { toast } from "vue-sonner";
+
 const email = ref("");
 const password = ref("");
-const firstName = ref("");
-const lastName = ref("");
-const salutation = ref("");
-const salutations = ["Mr.", "Mrs."];
 const isLoading = ref(false);
 
 const register = async () => {
@@ -121,15 +79,13 @@ const register = async () => {
       body: {
         email: email.value,
         password: password.value,
-        firstName: firstName.value,
-        lastName: lastName.value,
-        salutation: salutation.value,
       },
     });
-    if (error.value) throw Error(status.value);
+    if (error.value) throw Error(error.value?.data?.message);
     navigateTo("/dashboard");
+    toast("Register successful, you`re now logged in");
   } catch (error) {
-    alert((error as Error).message);
+    toast((error as Error).message || "register failed");
   }
 };
 </script>

@@ -4,10 +4,10 @@ import bcrypt from 'bcrypt';
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const { email, password, firstName, lastName, salutation } = body;
+  const { email, password } = body;
 
   // Validate input
-  if (!email || !password || !firstName || !lastName || !salutation) {
+  if (!email || !password) {
     throw createError({ statusCode: 400, message: 'All fields are required' });
   }
 
@@ -28,9 +28,9 @@ export default defineEventHandler(async (event) => {
     data: {
       email,
       password: hashedPassword,
-      firstName,
-      lastName,
-      salutation,
+      firstName: '',
+      lastName: '',
+      salutation: '',
     },
   });
 
@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
     httpOnly: true,
     maxAge: 2 * 60 * 60, // 2 hours
     sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production', // Enable in production
+    secure: !import.meta.dev, // Enable in production
   });
 
   return { message: 'Registration successful' };

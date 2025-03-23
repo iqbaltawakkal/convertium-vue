@@ -27,16 +27,41 @@
           </div>
           <div class="grid gap-1">
             <Label class="sr-only" for="password"> Password </Label>
-            <Input
-              id="password"
-              placeholder="Password"
-              type="password"
-              auto-capitalize="none"
-              auto-correct="off"
-              v-model="password"
-              required
-              class="bg-white"
-            />
+            <div class="relative">
+              <Input
+                id="password"
+                placeholder="Password"
+                :type="typeInput"
+                auto-capitalize="none"
+                auto-correct="off"
+                v-model="password"
+                required
+                class="bg-white pr-10"
+              />
+              <span
+                @click="
+                  typeInput = typeInput === 'password' ? 'text' : 'password'
+                "
+                class="absolute end-0 inset-y-0 flex items-center justify-center px-2"
+              >
+                <Eye
+                  v-if="typeInput === 'password'"
+                  class="size-5 text-muted-foreground"
+                />
+                <EyeClosed v-else class="size-6 text-muted-foreground" />
+              </span>
+            </div>
+          </div>
+          <div class="items-top flex gap-x-2">
+            <Checkbox v-model="keepMeLoggedIn" id="terms1" />
+            <div class="grid gap-1.5 leading-none">
+              <label
+                for="terms1"
+                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Keep me logged in
+              </label>
+            </div>
           </div>
           <Button type="submit" class="mt-4">
             <LoaderIcon v-if="isLoading" class="mr-2 h-4 w-4 animate-spin" />
@@ -64,24 +89,31 @@
 </template>
 
 <script setup lang="ts">
-import { LoaderIcon } from "lucide-vue-next";
+import { Eye, EyeClosed, LoaderIcon } from "lucide-vue-next";
+import { toast } from "vue-sonner";
 const email = ref("");
 const password = ref("");
+const keepMeLoggedIn = ref(false);
 const isLoading = ref(false);
+const typeInput = ref("password");
 
 const login = async () => {
   try {
     // Call the login API
     isLoading.value = true;
-    const { error, status } = await useFetch("/api/login", {
+    const { error } = await useFetch("/api/login", {
       method: "POST",
-      body: { email: email.value, password: password.value },
+      body: {
+        email: email.value,
+        password: password.value,
+        keepMeLoggedIn: keepMeLoggedIn.value,
+      },
     });
-    if (error.value) throw Error(status.value);
+    if (error.value) throw Error(error.value?.data?.message);
     // Redirect to the dashboard after successful login
     navigateTo("/dashboard");
   } catch (error) {
-    alert((error as Error).message || "Login failed");
+    toast((error as Error).message || "Login failed");
   } finally {
     isLoading.value = false;
   }
